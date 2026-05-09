@@ -44,3 +44,6 @@ buildNumber.properties
 .classpath
 
 # End of https://www.toptal.com/developers/gitignore/api/java,maven
+/dependencias/listas_00000228264/listaArreglo/nbproject/
+/dependencias/listas_00000228264/listasEnlazadas/nbproject/
+/dependencias/arboles_00000228264/arbolesBinarios/nbproject/
