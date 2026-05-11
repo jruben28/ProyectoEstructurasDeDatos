@@ -11,14 +11,14 @@ import implementaciones.LinkedList;
  * @author joser
  */
 public class Curso {
-    float clave;
+    Float clave;
     String nombre;
     LinkedList<Estudiante> listadoEstudiantes;
     //CircularDoubleLinkedList<Estudiante> listaEspera;
     //CircularLinkedList<Estudiante> roles;
     Estudiante tutorActual;
 
-    public Curso(float clave, String nombre) {
+    public Curso(Float clave, String nombre) {
         this.clave = clave;
         this.nombre = nombre;
         this.listadoEstudiantes = new LinkedList<>();
@@ -66,5 +66,24 @@ public class Curso {
     public void actualizarListaRoles(){
     
     }
+
+    public Float getClave() {
+        return clave;
+    }
+
+    public void setClave(Float clave) {
+        this.clave = clave;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+    
+    
+    
     
 }
