@@ -118,7 +118,7 @@ public class Estudiante implements Comparable<Estudiante>{
      * @return promedio estudiante.
      */
     public float calcularPromedio(){
-        
+        //Agregar par promedio a ArbolAVL aqui
         return 0.0f;
     }
     
