@@ -11,7 +11,7 @@ import implementaciones.ArrayListQueue;
  *
  * @author joser
  */
-public class Estudiante {
+public class Estudiante implements Comparable<Estudiante>{
     String matricula;
     String nombreCompleto;
     String telefono;
@@ -46,6 +46,7 @@ public class Estudiante {
         this.ciudad = ciudad;
         this.calificaciones = new ArrayList(float.class, 30);
         this.solicitudCalificaciones = new ArrayListQueue(ArrayList.class, 30);
+        agregarABST();
     }
 
     public String getMatricula() {
@@ -136,4 +137,15 @@ public class Estudiante {
     
     }
     
+    /**
+     * Al crear un estudiante, lo agrega al arbol binario de busqueda.
+     */
+    public void agregarABST(){
+        
+    }
+
+    @Override
+    public int compareTo(Estudiante otro) {
+         return this.matricula.compareTo(otro.matricula);
+    }
 }
