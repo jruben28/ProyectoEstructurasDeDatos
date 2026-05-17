@@ -178,6 +178,10 @@ public class Estudiante implements Comparable<Estudiante>{
         System.out.println("Estudiante con matricula " + this.matricula + " agregado al BST correctamente");
     }
 
+    public ArrayList getCalificaciones() {
+        return calificaciones;
+    }
+    
     @Override
     public int compareTo(Estudiante otro) {
          return this.matricula.compareTo(otro.matricula);
