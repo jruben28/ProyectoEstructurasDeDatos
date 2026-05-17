@@ -4,6 +4,7 @@
  */
 package implementaciones;
 
+import java.util.Iterator;
 import objetos.Estudiante;
 
 /**
@@ -16,14 +17,27 @@ public class EstudiantesBST {
     public EstudiantesBST() {
         this.estudiantes = new BinarySearchTree<>();
     }
-    
+    /**
+     * Inserta un estudiante en el arbol binario de busqueda.
+     * @param estudiante. Estudiante a insertar.
+     */
+    public void insertarEstudiante(Estudiante estudiante) {
+        estudiantes.insert(estudiante);
+    }
     /**
      * Regresa el estudiante que encuentre con la misma matricula.
      * @param matricula
      * @return 
      */
     public Estudiante busquedaPorMatricula(String matricula){
+        Iterator<Estudiante> iterator = estudiantes.getInorderIterator();
+        while (iterator.hasNext()) {
+            Estudiante estudiante = iterator.next();
+            if (estudiante.getMatricula().equals(matricula)) {
+                return estudiante;
+            }
+        }
         return null;
     }
-    //qwer
+    
 }

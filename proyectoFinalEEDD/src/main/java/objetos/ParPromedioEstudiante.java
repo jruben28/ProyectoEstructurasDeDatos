@@ -37,6 +37,13 @@ public class ParPromedioEstudiante implements Comparable<ParPromedioEstudiante>{
     
     @Override
     public int compareTo(ParPromedioEstudiante otro) {
+        if (this.promedio < otro.promedio) {
+            return -1;
+            
+        }else if (this.promedio > otro.promedio) {
+            return 1;
+            
+        }
         return this.estudiante.getMatricula().compareTo(otro.estudiante.getMatricula());
     }
     

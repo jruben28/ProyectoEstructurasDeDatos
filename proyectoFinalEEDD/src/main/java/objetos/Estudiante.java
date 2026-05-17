@@ -6,6 +6,7 @@ package objetos;
 
 import implementaciones.ArrayList;
 import implementaciones.ArrayListQueue;
+import implementaciones.EstudiantesBST;
 
 /**
  *
@@ -20,7 +21,6 @@ public class Estudiante implements Comparable<Estudiante>{
     String numero;
     String colonia;
     String ciudad;
-    
     ArrayList calificaciones;
     ArrayListQueue solicitudCalificaciones;
 
@@ -117,9 +117,24 @@ public class Estudiante implements Comparable<Estudiante>{
      * Calcula promedio del estudiante recursivamente.
      * @return promedio estudiante.
      */
-    public float calcularPromedio(){
-        //Agregar par promedio a ArbolAVL aqui
-        return 0.0f;
+    public float calcularPromedio() {
+        if (calificaciones == null || calificaciones.empty()) {
+            return 0.0f;
+        }
+        return sumarCalificacionesRecursivo(0) / calificaciones.size();
+    }
+    
+    /**
+     * Suma todas las calificaciones de forma recursiva.
+     * @param indice Posicion inicial de arreglo de calificacion.
+     * @return La suma acumulada de las calificaciones.
+     */
+    private float sumarCalificacionesRecursivo(int indice) {
+        if (indice == calificaciones.size()) {
+            return 0.0f;
+        }
+        return (float)calificaciones.get(indice) + sumarCalificacionesRecursivo(indice + 1);
+        
     }
     
     /**
@@ -127,21 +142,42 @@ public class Estudiante implements Comparable<Estudiante>{
      * @param nuevaLista 
      */
     public void agregarSolicitudCalificaciones(ArrayList nuevaLista){
-    
+        if (nuevaLista != null) {
+            solicitudCalificaciones.enqueue(nuevaLista);
+            
+        }
     }
     
     /**
      * Procesa la siguiente solicitud en la cola y la aplica.
      */
     public void procesarSiguienteSolicitud(){
+        if (!solicitudCalificaciones.empty()) {
+            this.calificaciones = (ArrayList) solicitudCalificaciones.dequeue();
+            
+        }
     
     }
-    
+    private static EstudiantesBST bstGlobal = new EstudiantesBST();
+
+    public static EstudiantesBST getBSTGlobal() {
+        return bstGlobal;
+    }
     /**
      * Al crear un estudiante, lo agrega al arbol binario de busqueda.
      */
     public void agregarABST(){
-        
+        // Validamos que el arbol global exista
+        if (getBSTGlobal() == null) {
+            System.out.println("El árbol de estudiantes no está inicializado");
+            return;
+        }
+
+        // Insertamos el estudiante actual en el arbol
+        getBSTGlobal().insertarEstudiante(this);
+
+        // Confirmamos la operacion
+        System.out.println("Estudiante con matricula " + this.matricula + " agregado al BST correctamente");
     }
 
     @Override

@@ -4,6 +4,7 @@
  */
 package implementaciones;
 
+import java.util.Iterator;
 import objetos.ParPromedioEstudiante;
 
 /**
@@ -22,6 +23,10 @@ public class PromedioEstudiante {
      * @param estudiante 
      */
     public void agregarParPromedioEstudiante(ParPromedioEstudiante estudiante) {
+        if (estudiante != null) {
+            this.parPromedioEstudiante.insert(estudiante);
+            
+        }
 
     }
 
@@ -29,6 +34,19 @@ public class PromedioEstudiante {
      * Imprime el listado del promedio de estudiantes en orden ascendente.
      */
     public void imprimirListado(){
+        if (parPromedioEstudiante.empty()) {
+            System.out.println("No hay promedio registrado.");
+            return;
+        }
+        Iterator<ParPromedioEstudiante> iterator = parPromedioEstudiante.getInorderIterator();
+        while (iterator.hasNext()) {
+            ParPromedioEstudiante par = iterator.next();
+            System.out.println("Promedio: " + par.getPromedio()
+                    + " | Matricula: " + par.getEstudiante().getMatricula()
+                    + " | Nombre: " + par.getEstudiante().getNombreCompleto());
+        }
     
     }
+    
+   
 }
