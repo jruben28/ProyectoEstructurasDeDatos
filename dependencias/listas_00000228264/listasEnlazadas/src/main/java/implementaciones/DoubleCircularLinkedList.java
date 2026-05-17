@@ -11,7 +11,16 @@ import excepciones.ListException;
  * @author Jorge
  */
 public class DoubleCircularLinkedList<T> {
-      private Nodo<T> inicio;
+
+    private Nodo<T> inicio;
+
+    public Nodo<T> getInicio() {
+        return inicio;
+    }
+
+    public void setInicio(Nodo<T> inicio) {
+        this.inicio = inicio;
+    }
 
     public boolean empty() {
         return inicio == null;
@@ -22,6 +31,23 @@ public class DoubleCircularLinkedList<T> {
             throw new ListException("Error: la lista esta vacia");
         }
         return inicio.getDato();
+    }
+
+    public boolean contains(T dato) {
+        if (inicio == null) {
+            return false;
+        }
+        Nodo<T> aux = inicio;
+        while (aux.getSiguiente() != inicio) {
+            if (aux.getDato().equals(dato)) {
+                return true;
+            }
+            aux = aux.getSiguiente();
+        }
+        if (aux.getDato().equals(dato)) {
+            return true;
+        }
+        return false;
     }
 
     public void addFirst(T dato) {

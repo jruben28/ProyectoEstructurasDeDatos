@@ -14,6 +14,18 @@ public class CircularLinkedList<T> {
 
     private Nodo<T> inicio;
 
+    public Nodo<T> getInicio() {
+        return inicio;
+    }
+    
+    public void setInicio(Nodo<T> inicio) {
+        this.inicio = inicio;
+    }
+
+    public void clear() {
+        inicio = null;
+    }
+
     public boolean empty() {
         return inicio == null;
     }
