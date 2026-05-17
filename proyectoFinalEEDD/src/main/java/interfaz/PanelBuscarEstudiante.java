@@ -4,17 +4,39 @@
  */
 package interfaz;
 
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import objetos.Estudiante;
+
 /**
  *
  * @author joser
  */
 public class PanelBuscarEstudiante extends javax.swing.JPanel {
+    
+    private MainFrame mainFrame;
+    private JTextField txtBusquedaMatricula;
+    private JTextArea txtAreaDatos;
+    private JTextArea txtAreaCalificaciones;
+    private JButton btnBuscar;
 
     /**
      * Creates new form PanelBuscarEstudiante
      */
-    public PanelBuscarEstudiante() {
-        initComponents();
+    public PanelBuscarEstudiante(MainFrame mainFrame) {
+        this.mainFrame = mainFrame;
+        iniciarComponentes();
+        
     }
 
     /**
@@ -37,6 +59,91 @@ public class PanelBuscarEstudiante extends javax.swing.JPanel {
             .addGap(0, 300, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void iniciarComponentes() {
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.BOTH;
+
+        JLabel lblTitulo = new JLabel("BÚSQUEDA INTEGRAL DE ESTUDIANTE", SwingConstants.CENTER);
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        add(lblTitulo, gbc);
+
+        txtBusquedaMatricula = new JTextField();
+        txtBusquedaMatricula.setBorder(BorderFactory.createTitledBorder("Matrícula a buscar"));
+        gbc.gridy = 1;
+        gbc.gridx = 0;
+        gbc.gridwidth = 1;
+        gbc.weightx = 0.8;
+        add(txtBusquedaMatricula, gbc);
+
+        btnBuscar = new JButton("Buscar");
+        gbc.gridx = 1;
+        gbc.weightx = 0.2;
+        add(btnBuscar, gbc);
+
+        txtAreaDatos = new JTextArea(15, 20);
+        txtAreaDatos.setEditable(false);
+        JScrollPane scrollDatos = new JScrollPane(txtAreaDatos);
+        scrollDatos.setBorder(BorderFactory.createTitledBorder("Datos del Estudiante"));
+        
+        gbc.gridy = 2;
+        gbc.gridx = 0;
+        gbc.weightx = 0.5;
+        gbc.weighty = 1.0;
+        add(scrollDatos, gbc);
+
+
+        txtAreaCalificaciones = new JTextArea(15, 20);
+        txtAreaCalificaciones.setEditable(false);
+        JScrollPane scrollCalificaciones = new JScrollPane(txtAreaCalificaciones);
+        scrollCalificaciones.setBorder(BorderFactory.createTitledBorder("Calificaciones (Historial)"));
+        
+        gbc.gridx = 1;
+        add(scrollCalificaciones, gbc);
+
+        btnBuscar.addActionListener(e -> buscar());
+    }
+
+    private void buscar() {
+        String mat = txtBusquedaMatricula.getText().trim();
+        if (mat.isEmpty()) return;
+
+        Estudiante encontrado = mainFrame.arbolEstudiantes.busquedaPorMatricula(mat);
+        
+
+        if (encontrado != null) {
+            txtAreaDatos.setText(
+                "Nombre: " + encontrado.getNombreCompleto() + "\n" +
+                "Tel: " + encontrado.getTelefono() + "\n" +
+                "Correo: " + encontrado.getCorreo() + "\n" +
+                "Dirección: " + encontrado.getCalle() + " #" + encontrado.getNumero() + "\n" +
+                "Colonia: " + encontrado.getColonia()
+            );
+
+            StringBuilder sb = new StringBuilder();
+            if (encontrado.getCalificaciones().empty()) {
+                sb.append("No hay calificaciones registradas.");
+            }
+            
+            
+            encontrado.getCalificaciones().forEach(nota ->
+            sb.append("Nota ").append(": ").append(nota).append("\n")
+            );
+            
+            
+            txtAreaCalificaciones.setText(sb.toString());
+
+        } else {
+            txtAreaDatos.setText("");
+            txtAreaCalificaciones.setText("");
+            JOptionPane.showMessageDialog(this, "Estudiante no encontrado.");
+        }
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

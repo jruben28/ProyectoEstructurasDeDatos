@@ -123,7 +123,7 @@ public class MainFrame extends javax.swing.JFrame {
         mainContainer = new JPanel(cardLayout);
         
         pnlRegistroEst = new PanelRegistroEstudiante(this);
-        pnlBuscarEst = new PanelBuscarEstudiante();
+        pnlBuscarEst = new PanelBuscarEstudiante(this);
         
         pnlAgregarCurso = new PanelAgregarCurso();
         pnlEliminarCurso = new PanelEliminarCurso();
