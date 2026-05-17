@@ -4,6 +4,7 @@
  */
 package implementaciones;
 
+import implementaciones.BinarySearchTree;
 import java.util.Iterator;
 import objetos.Estudiante;
 

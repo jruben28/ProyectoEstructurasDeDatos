@@ -4,6 +4,7 @@
  */
 package implementaciones;
 
+import implementaciones.AVLTree;
 import java.util.Iterator;
 import objetos.ParPromedioEstudiante;
 
