@@ -117,41 +117,60 @@ public class SistemaEscolar {
     }
 
     public void deshacerUltimaAccion() {
-        //guardamos la accion temporalmente 
+        //obtenemos la ultima accion realizada
         Accion accion = acciones.deshacerAccion();
-        //validamos si esta nula 
+        //validamos si la accion existe
         if (accion == null) {
             return;
         }
+        //guardamos el tipo de accion
         String tipoAccion = accion.getTipo();
+        //evaluamos el tipo de accion
         switch (tipoAccion) {
             case "REGISTRO_ESTUDIANTE":
-                Estudiante estudiante = (Estudiante) accion.getDato();
-                //eliminamos el estudiante
+                //obtenemos el estudiante registrado
+                Estudiante estudiante= (Estudiante) accion.getDato();
+                //eliminamos el estudiante del BST
                 estudiantes.eliminarEstudiante(estudiante);
+                //mostramos mensaje
                 System.out.println("Se deshizo el registro de estudiante");
                 break;
+
             case "REGISTRO_CURSO":
-                Curso curso = (Curso) accion.getDato();
+                //obtenemos el curso registrado
+                Curso curso= (Curso) accion.getDato();
+                //eliminamos el curso
                 cursos.eliminarCurso(curso.getClave());
+                //mostramos mensaje
                 System.out.println("Se deshizo el registro del curso");
                 break;
             case "INSCRIPCION":
-                Inscripcion inscripcion = (Inscripcion) accion.getDato();
-                Curso curso2 = inscripcion.getCurso();
-                Estudiante estudiante2 = inscripcion.getEstudiante();
+                //obtenemos la inscripcion
+                Inscripcion inscripcion= (Inscripcion) accion.getDato();
+                //obtenemos el curso
+                Curso curso2= inscripcion.getCurso();
+                //obtenemos el estudiantew
+                Estudiante estudiante2= inscripcion.getEstudiante();
+                //eliminamos el estudiante del curso
                 curso2.eliminarEstudiante(estudiante2);
+                //mostramos mensaje
                 System.out.println("Se deshizo la inscripcion");
                 break;
             case "CALIFICACION":
+                //obtenemos la solicitiud
                 SolicitudCalificacion solicitud= (SolicitudCalificacion) accion.getDato();
+                //obtenemos el estudiante
                 Estudiante estudiante3= solicitud.getEstudiante();
+                //validamos si tiene calificaciones
                 if (!estudiante3.getCalificaciones().empty()) {
+                    //eliminamos la ultima calificacion agregada
                     estudiante3.getCalificaciones().remove(estudiante3.getCalificaciones().size() - 1);
                 }
+                //mostramos mensaje
                 System.out.println("Se deshizo la calificacion");
                 break;
             default:
+                //mostramos mensaje si el tipo no existe
                 System.out.println("Tipo de accion no reconocido");
         }
     }
