@@ -4,17 +4,34 @@
  */
 package interfaz;
 
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import objetos.Estudiante;
+
 /**
  *
  * @author joser
  */
 public class PanelRegistroEstudiante extends javax.swing.JPanel {
+    
+    private MainFrame mainFrame;
+    private JTextField txtMatricula, txtNombre, txtTelefono, txtCorreo;
+    private JTextField txtCalle, txtNumero, txtColonia, txtCiudad;
+    private JButton btnRegistrar;
 
     /**
      * Creates new form PanelRegistroEstudiante
      */
-    public PanelRegistroEstudiante() {
-        initComponents();
+    public PanelRegistroEstudiante(MainFrame mainFrame) {
+        this.mainFrame = mainFrame;
+        iniciarComponentes();
     }
 
     /**
@@ -38,7 +55,138 @@ public class PanelRegistroEstudiante extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void iniciarComponentes() {
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
+        JLabel lblTitulo = new JLabel("REGISTRO DE ESTUDIANTE", SwingConstants.CENTER);
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.insets = new Insets(10, 10, 20, 10);
+        add(lblTitulo, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.insets = new Insets(5, 5, 5, 5);
+
+        agregarCampo("Matrícula:", txtMatricula = new JTextField(20), 1, gbc);
+        
+        agregarCampo("Nombre Completo:", txtNombre = new JTextField(20), 2, gbc);
+        
+        agregarCampo("Teléfono:", txtTelefono = new JTextField(20), 3, gbc);
+        
+        agregarCampo("Correo:", txtCorreo = new JTextField(20), 4, gbc);
+
+        agregarCampo("Calle:", txtCalle = new JTextField(20), 5, gbc);
+        
+        agregarCampo("Número:", txtNumero = new JTextField(20), 6, gbc);
+        
+        agregarCampo("Colonia:", txtColonia = new JTextField(20), 7, gbc);
+
+        agregarCampo("Ciudad:", txtCiudad = new JTextField(20), 8, gbc);
+
+        btnRegistrar = new JButton("Registrar");
+        gbc.gridx = 0;
+        gbc.gridy = 9;
+        gbc.gridwidth = 2;
+        gbc.insets = new Insets(20, 0, 0, 0);
+        add(btnRegistrar, gbc);
+        
+        btnRegistrar.addActionListener(e -> registrar());
+    }
+
+    /**
+     * Método auxiliar para no repetir código al añadir etiquetas y campos
+     */
+    private void agregarCampo(String etiqueta, JTextField campo, int fila, GridBagConstraints gbc) {
+        gbc.gridy = fila;
+        
+        gbc.gridx = 0;
+        gbc.weightx = 0; 
+        add(new JLabel(etiqueta), gbc);
+
+        gbc.gridx = 1;
+        gbc.weightx = 1.0;
+        add(campo, gbc);
+    }
+
+
+    private void registrar() {
+        if (!datosValidos()) {
+            return;
+        }
+        
+        String mat = txtMatricula.getText().trim();
+        String nom = txtNombre.getText().trim();
+        String tel = txtTelefono.getText().trim();
+        String cor = txtCorreo.getText().trim();
+        String cal = txtCalle.getText().trim();
+        String num = txtNumero.getText().trim();
+        String col = txtColonia.getText().trim();
+        String ciu = txtCiudad.getText().trim();
+        
+        Estudiante estudiante = new Estudiante(mat, nom, tel, cor, cal, num, col, ciu, mainFrame.arbolEstudiantes);
+
+        JOptionPane.showMessageDialog(this, "¡Estudiante " + nom + " registrado con éxito!");
+        mainFrame.arbolEstudiantes.imprimirPrimero();
+
+        limpiarCampos();
+    }
+
+    private void limpiarCampos() {
+        txtMatricula.setText("");
+        txtNombre.setText("");
+        txtTelefono.setText("");
+        txtCorreo.setText("");
+        txtCalle.setText("");
+        txtNumero.setText("");
+        txtColonia.setText("");
+        txtCiudad.setText("");
+        txtMatricula.requestFocus();
+    }
+
+    /**
+     * metodo para validar datos de estudiante
+     * @return 
+     */
+    private boolean datosValidos() {
+        JTextField[] campos = {
+            txtMatricula, txtNombre, txtTelefono, txtCorreo,
+            txtCalle, txtNumero, txtColonia, txtCiudad
+        };
+
+        for (JTextField campo : campos) {
+            if (campo.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "Todos los campos son obligatorios.",
+                        "Faltan datos",
+                        JOptionPane.WARNING_MESSAGE);
+                campo.requestFocus();
+                return false;
+            }
+        }
+
+
+        if (!txtCorreo.getText().contains("@") || !txtCorreo.getText().contains(".")) {
+            JOptionPane.showMessageDialog(this, "El formato del correo es inválido.");
+            txtCorreo.requestFocus();
+            return false;
+        }
+
+        try {
+            Integer.parseInt(txtMatricula.getText().trim());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "La matrícula debe ser un valor numérico.");
+            txtMatricula.requestFocus();
+            return false;
+        }
+
+        return true;
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 }
