@@ -44,8 +44,8 @@ public class Estudiante implements Comparable<Estudiante>{
         this.numero = numero;
         this.colonia = colonia;
         this.ciudad = ciudad;
-        this.calificaciones = new ArrayList(float.class, 30);
-        this.solicitudCalificaciones = new ArrayListQueue(ArrayList.class, 30);
+        this.calificaciones = new ArrayList(Float.class, 30);
+        this.solicitudCalificaciones = new ArrayListQueue(Float.class, 30);
         agregarABST(arbolEstudiantes);
     }
 
