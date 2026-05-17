@@ -4,6 +4,7 @@
  */
 package interfaz;
 
+import implementaciones.EstudiantesBST;
 import java.awt.CardLayout;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -37,6 +38,10 @@ public class MainFrame extends javax.swing.JFrame {
     
     private PanelListarPromedio pnlListarPromedio;
     private PanelRotarRol pnlRotarRol;
+    
+    //persistencia
+    public EstudiantesBST arbolEstudiantes = new EstudiantesBST();
+    
 
     /**
      * Creates new form MainFrame
@@ -117,7 +122,7 @@ public class MainFrame extends javax.swing.JFrame {
         cardLayout = new CardLayout();
         mainContainer = new JPanel(cardLayout);
         
-        pnlRegistroEst = new PanelRegistroEstudiante();
+        pnlRegistroEst = new PanelRegistroEstudiante(this);
         pnlBuscarEst = new PanelBuscarEstudiante();
         
         pnlAgregarCurso = new PanelAgregarCurso();
