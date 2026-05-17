@@ -41,4 +41,9 @@ public class EstudiantesBST {
         return null;
     }
     
+    
+    public void imprimirPrimero(){
+        System.out.println(estudiantes.firstEntry().toString());
+    }
+    
 }
