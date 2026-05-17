@@ -64,6 +64,19 @@ public class Curso {
         return actual.getDato();
     }
 
+    public void eliminarEstudiante(Estudiante estudiante) {
+        //validamos que el estudiante exista
+        if (estudiante == null) {
+            System.out.println("El estudiante no existe");
+            return;
+        }
+        //eliminamos el estudiante del listado
+        listadoEstudiantes.remove(estudiante);
+        //actualizamos los roles
+        actualizarListaRoles();
+        System.out.println("Estudiante eliminado correctamente");
+    }
+
     /**
      * Recorre la lista de espera atras y regresa el anterior estudiante
      *

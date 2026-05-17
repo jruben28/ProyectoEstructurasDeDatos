@@ -5,9 +5,12 @@
 package implementaciones;
 
 import implementaciones.ArrayListQueue;
+import objetos.Accion;
 import objetos.Curso;
 import objetos.Estudiante;
+import objetos.Inscripcion;
 import objetos.ParPromedioEstudiante;
+import objetos.SolicitudCalificacion;
 
 /**
  *
@@ -20,7 +23,7 @@ public class SistemaEscolar {
     //catalogo de cursos
     private CatalogoCursos cursos;
     //cola de solicitudes de calificaciones
-    private ArrayListQueue solicitudes;
+    private ArrayListQueue<SolicitudCalificacion> solicitudes;
     //pila de acciones
     private Acciones acciones;
     //arbol AVL de promedios
@@ -32,9 +35,11 @@ public class SistemaEscolar {
         //inicializamos el catalogo de cursos
         cursos = new CatalogoCursos();
         //inicializamos la cola de solicitudes
-        solicitudes = null;
+        solicitudes = new ArrayListQueue<>(SolicitudCalificacion.class,50);
         //inicializamos las acciones
         acciones = new Acciones();
+        //inicializamos promedios 
+        promedios = new PromedioEstudiante();
     }
 
     public void registrarEstudiante(Estudiante estudiante) {
@@ -46,6 +51,8 @@ public class SistemaEscolar {
         }
         //agregamos el estudiante 
         estudiantes.insertarEstudiante(estudiante);
+        //registramos la accion realizada 
+        acciones.agregarAccion(new Accion("REGISTRO_ESTUDIANTE", estudiante));
         //mostramos el estudiantw
         System.out.println("Estudiante agregado correctamente");
     }
@@ -59,6 +66,8 @@ public class SistemaEscolar {
         }
         //agregamos el curso 
         cursos.agregarCurso(curso);
+        //registamos la accion
+        acciones.agregarAccion(new Accion("REGISTRO_CURSO", curso));
         System.out.println("Curso agregado correctamente");
     }
 
@@ -101,8 +110,55 @@ public class SistemaEscolar {
         }
         //inscribimos el estudiante en el curso
         curso.inscribirEstudiante(estudiante);
+        //registramos la accion
+        acciones.agregarAccion(new Accion("INSCRIPCION", new Inscripcion(estudiante, curso)));
         //mostramos el mensaje de exito 
         System.out.println("Inscripcion realizada correctamente");
+    }
+
+    public void deshacerUltimaAccion() {
+        //guardamos la accion temporalmente 
+        Accion accion = acciones.deshacerAccion();
+        //validamos si esta nula 
+        if (accion == null) {
+            return;
+        }
+        String tipoAccion = accion.getTipo();
+        switch (tipoAccion) {
+            case "REGISTRO_ESTUDIANTE":
+                Estudiante estudiante = (Estudiante) accion.getDato();
+                //eliminamos el estudiante
+                estudiantes.eliminarEstudiante(estudiante);
+                System.out.println("Se deshizo el registro de estudiante");
+                break;
+            case "REGISTRO_CURSO":
+                Curso curso = (Curso) accion.getDato();
+                cursos.eliminarCurso(curso.getClave());
+                System.out.println("Se deshizo el registro del curso");
+                break;
+            case "INSCRIPCION":
+                Inscripcion inscripcion = (Inscripcion) accion.getDato();
+                Curso curso2 = inscripcion.getCurso();
+                Estudiante estudiante2 = inscripcion.getEstudiante();
+                curso2.eliminarEstudiante(estudiante2);
+                System.out.println("Se deshizo la inscripcion");
+                break;
+            default:
+                System.out.println("Tipo de accion no reconocido");
+        }
+    }
+
+    public void deshacerTodasAcciones() {
+        //validamos si existen acciones
+        if (acciones.getAcciones().empty()) {
+            System.out.println("No hay acciones para deshacer");
+            return;
+        }
+        //deshacemos todas las acciones
+        while (!acciones.getAcciones().empty()) {
+            deshacerUltimaAccion();
+        }
+        System.out.println("Todas las acciones fueron deshechas");
     }
 
     public LinkedList<Estudiante> mostrarEstudiantesCurso(String claveCurso) {
@@ -192,7 +248,7 @@ public class SistemaEscolar {
         //mostramos mensaje de exito
         System.out.println("Promedio registrado correctamente");
     }
-    
+
     public void mostrarPromediosEstudiantes() {
         //mostramos el listado de promedios
         promedios.imprimirListado();
@@ -218,11 +274,11 @@ public class SistemaEscolar {
         this.cursos = cursos;
     }
 
-    public ArrayListQueue getSolicitudes() {
+    public ArrayListQueue<SolicitudCalificacion> getSolicitudes() {
         return solicitudes;
     }
 
-    public void setSolicitudes(ArrayListQueue solicitudes) {
+    public void setSolicitudes(ArrayListQueue<SolicitudCalificacion> solicitudes) {
         this.solicitudes = solicitudes;
     }
 
@@ -232,6 +288,14 @@ public class SistemaEscolar {
 
     public void setAcciones(Acciones acciones) {
         this.acciones = acciones;
+    }
+
+    public PromedioEstudiante getPromedios() {
+        return promedios;
+    }
+
+    public void setPromedios(PromedioEstudiante promedios) {
+        this.promedios = promedios;
     }
 
 }
