@@ -35,7 +35,7 @@ public class SistemaEscolar {
         //inicializamos el catalogo de cursos
         cursos = new CatalogoCursos();
         //inicializamos la cola de solicitudes
-        solicitudes = new ArrayListQueue<>(SolicitudCalificacion.class,50);
+        solicitudes = new ArrayListQueue<>(SolicitudCalificacion.class, 50);
         //inicializamos las acciones
         acciones = new Acciones();
         //inicializamos promedios 
@@ -143,6 +143,14 @@ public class SistemaEscolar {
                 curso2.eliminarEstudiante(estudiante2);
                 System.out.println("Se deshizo la inscripcion");
                 break;
+            case "CALIFICACION":
+                SolicitudCalificacion solicitud= (SolicitudCalificacion) accion.getDato();
+                Estudiante estudiante3= solicitud.getEstudiante();
+                if (!estudiante3.getCalificaciones().empty()) {
+                    estudiante3.getCalificaciones().remove(estudiante3.getCalificaciones().size() - 1);
+                }
+                System.out.println("Se deshizo la calificacion");
+                break;
             default:
                 System.out.println("Tipo de accion no reconocido");
         }
@@ -247,6 +255,45 @@ public class SistemaEscolar {
         promedios.agregarParPromedioEstudiante(par);
         //mostramos mensaje de exito
         System.out.println("Promedio registrado correctamente");
+    }
+
+    public void enviarSolicitudCalificacion(String matricula, String claveCurso, double calificacion) {
+        //buscamos el estudiante
+        Estudiante estudiante = buscarEstudiante(matricula);
+        //validamos que exista
+        if (estudiante == null) {
+            return;
+        }
+        //buscamos el estudiante
+        Curso curso = cursos.buscarCurso(claveCurso);
+        //validamos el curso
+        if (curso == null) {
+            return;
+        }
+        //creamos la solicitud
+        SolicitudCalificacion solicitud = new SolicitudCalificacion(estudiante, curso, calificacion);
+        //guardamos la solicitud
+        solicitudes.enqueue(solicitud);
+        System.out.println("Solicitud enviada");
+    }
+
+    public void procesarSiguienteSolicitud() {
+        //validamos si la cola esta vacia 
+        if (solicitudes.empty()) {
+            System.out.println("No hay solicitudes pendientes");
+            return;
+        }
+        //obtenemos la solicitud
+        SolicitudCalificacion solicitud = solicitudes.dequeue();
+        //obtenemos al estudiante 
+        Estudiante estudiante = solicitud.getEstudiante();
+        //obtenemos la calificacion 
+        double cal = solicitud.getCalificacion();
+        //agregamos la calificacion al arreglo
+        estudiante.getCalificaciones().append(cal);
+        //registramos la accion
+        acciones.agregarAccion(new Accion("CALIFICACION", solicitud));
+        System.out.println("Solicitud procesada correctamente");
     }
 
     public void mostrarPromediosEstudiantes() {
