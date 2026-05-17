@@ -72,7 +72,7 @@ public class SistemaEscolar {
     }
 
     public Estudiante buscarEstudiante(String matricula) {
-        //validamos si la matricula es nula 
+        //validamos si la matricula es nulaa
         if (matricula == null) {
             //mostramos el mensaje si es nula
             System.out.println("La matricula no puede ser nula");
