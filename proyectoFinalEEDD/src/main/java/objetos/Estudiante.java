@@ -35,7 +35,7 @@ public class Estudiante implements Comparable<Estudiante>{
      * @param colonia
      * @param ciudad 
      */
-    public Estudiante(String matricula, String nombreCompleto, String telefono, String correo, String calle, String numero, String colonia, String ciudad) {
+    public Estudiante(String matricula, String nombreCompleto, String telefono, String correo, String calle, String numero, String colonia, String ciudad, EstudiantesBST arbolEstudiantes) {
         this.matricula = matricula;
         this.nombreCompleto = nombreCompleto;
         this.telefono = telefono;
@@ -46,7 +46,7 @@ public class Estudiante implements Comparable<Estudiante>{
         this.ciudad = ciudad;
         this.calificaciones = new ArrayList(float.class, 30);
         this.solicitudCalificaciones = new ArrayListQueue(ArrayList.class, 30);
-        agregarABST();
+        agregarABST(arbolEstudiantes);
     }
 
     public String getMatricula() {
@@ -158,23 +158,21 @@ public class Estudiante implements Comparable<Estudiante>{
         }
     
     }
-    private static EstudiantesBST bstGlobal = new EstudiantesBST();
 
-    public static EstudiantesBST getBSTGlobal() {
-        return bstGlobal;
-    }
+
     /**
      * Al crear un estudiante, lo agrega al arbol binario de busqueda.
+     * @param arbolEstudiantes
      */
-    public void agregarABST(){
-        // Validamos que el arbol global exista
-        if (getBSTGlobal() == null) {
-            System.out.println("El árbol de estudiantes no está inicializado");
-            return;
-        }
+    public void agregarABST(EstudiantesBST arbolEstudiantes){
+//        // Validamos que el arbol global exista
+//        if (arbolEstudiantes == null) {
+//            System.out.println("El árbol de estudiantes no está inicializado");
+//            return;
+//        }
 
         // Insertamos el estudiante actual en el arbol
-        getBSTGlobal().insertarEstudiante(this);
+        arbolEstudiantes.insertarEstudiante(this);
 
         // Confirmamos la operacion
         System.out.println("Estudiante con matricula " + this.matricula + " agregado al BST correctamente");
