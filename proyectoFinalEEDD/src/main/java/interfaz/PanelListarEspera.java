@@ -5,6 +5,7 @@
 package interfaz;
 
 import implementaciones.DoubleCircularLinkedList;
+import implementaciones.Nodo;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -25,6 +26,7 @@ import objetos.Estudiante;
  * @author joser
  */
 public class PanelListarEspera extends javax.swing.JPanel {
+
     private MainFrame mainFrame;
     private JTextField txtClaveCursoEspera;
     private JTextArea txtAreaEspera;
@@ -90,13 +92,13 @@ public class PanelListarEspera extends javax.swing.JPanel {
         txtAreaEspera = new JTextArea(15, 40);
         txtAreaEspera.setEditable(false);
         txtAreaEspera.setFont(new Font("Monospaced", Font.PLAIN, 12));
-        
+
         JScrollPane scroll = new JScrollPane(txtAreaEspera);
         scroll.setBorder(BorderFactory.createTitledBorder("Orden de Prioridad"));
-        
+
         gbc.gridy = 3;
         gbc.fill = GridBagConstraints.BOTH;
-        gbc.weighty = 1.0; 
+        gbc.weighty = 1.0;
         add(scroll, gbc);
 
         btnConsultar.addActionListener(e -> listarEspera());
@@ -104,34 +106,41 @@ public class PanelListarEspera extends javax.swing.JPanel {
 
     private void listarEspera() {
         String clave = txtClaveCursoEspera.getText().trim();
-        
+
         Curso curso = mainFrame.sistemaEscolar.getCursos().buscarCurso(clave);
-        
+
         if (clave.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Ingresa una clave de curso.");
             return;
         }
-        
+
         if (curso == null) {
             JOptionPane.showMessageDialog(this, "El curso no existe.");
             return;
         }
-        
+
         DoubleCircularLinkedList<Estudiante> listado = mainFrame.sistemaEscolar.mostrarListaEsperaCurso(clave);
-        
+
         StringBuilder sb = new StringBuilder();
         sb.append("CURSO: ").append(curso.getNombre()).append("\n");
         sb.append("------------------------------------------------------------\n");
         sb.append(String.format("%-15s %-30s\n", "MATRÍCULA", "NOMBRE DEL ESTUDIANTE"));
         sb.append("------------------------------------------------------------\n");
 
-//        if (listado.empty()) {
-//            sb.append("\nNo hay estudiantes inscritos en este curso aún.");
-//        } else {
-//            for (Estudiante est : listado) {
-//                sb.append(String.format("%-15s %-30s\n", est.getMatricula(), est.getNombreCompleto()));
-//            }
-//        }
+        if (listado.empty()) {
+            sb.append("\nNo hay estudiantes inscritos en este curso aún.");
+        } else {
+            Nodo<Estudiante> inicio= listado.getInicio();
+            Nodo<Estudiante> actual= inicio;
+            while (actual != null) {
+                Estudiante est= actual.getDato();
+                sb.append(String.format("%-15s %-30s\n",est.getMatricula(),est.getNombreCompleto()));
+                actual = actual.getSiguiente();
+                if (actual == inicio) {
+                    break;
+                }
+            }
+        }
 
         txtAreaEspera.setText(sb.toString());
     }
