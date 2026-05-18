@@ -132,11 +132,11 @@ public class MainFrame extends javax.swing.JFrame {
         pnlEliminarCurso = new PanelEliminarCurso(this);
         pnlListarCurso = new PanelListarCurso(this);
         
-        pnlInscribirEst = new PanelInscribirEstudiante();
-        pnlListarInscritos = new PanelListarInscritos();
-        pnlListarEspera = new PanelListarEspera();
+        pnlInscribirEst = new PanelInscribirEstudiante(this);
+        pnlListarInscritos = new PanelListarInscritos(this);
+        pnlListarEspera = new PanelListarEspera(this);
         
-        pnlEnviarSolicitud = new PanelEnviarSolicitud();
+        pnlEnviarSolicitud = new PanelEnviarSolicitud(this);
         pnlProcesarSolicitud = new PanelProcesarSolicitud();
         
         pnlListarPromedio = new PanelListarPromedio();
