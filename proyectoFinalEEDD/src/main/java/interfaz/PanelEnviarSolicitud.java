@@ -4,17 +4,34 @@
  */
 package interfaz;
 
+import java.awt.Font;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import objetos.Curso;
+import objetos.Estudiante;
+
 /**
  *
  * @author joser
  */
 public class PanelEnviarSolicitud extends javax.swing.JPanel {
+    
+    private MainFrame mainFrame;
+    private JTextField txtMatriculaSol, txtClaveCursoSol, txtCalificacionSol;
+    private JButton btnEnviar;
 
     /**
      * Creates new form PanelEnviarSolicitud
      */
-    public PanelEnviarSolicitud() {
-        initComponents();
+    public PanelEnviarSolicitud(MainFrame mainFrame) {
+        this.mainFrame = mainFrame;
+        iniciarComponentes();
     }
 
     /**
@@ -38,6 +55,98 @@ public class PanelEnviarSolicitud extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void iniciarComponentes() {
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        JLabel lblTitulo = new JLabel("SOLICITUD DE REGISTRO DE CALIFICACIÓN", SwingConstants.CENTER);
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
+        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
+        gbc.insets = new Insets(0, 0, 30, 0);
+        add(lblTitulo, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.insets = new Insets(10, 10, 10, 10);
+
+        gbc.gridy = 1; gbc.gridx = 0;
+        add(new JLabel("Matrícula del Estudiante:"), gbc);
+        txtMatriculaSol = new JTextField(15);
+        gbc.gridx = 1;
+        add(txtMatriculaSol, gbc);
+
+        gbc.gridy = 2; gbc.gridx = 0;
+        add(new JLabel("Clave del Curso:"), gbc);
+        txtClaveCursoSol = new JTextField(15);
+        gbc.gridx = 1;
+        add(txtClaveCursoSol, gbc);
+
+        gbc.gridy = 3; gbc.gridx = 0;
+        add(new JLabel("Calificación (0.0 - 10.0):"), gbc);
+        txtCalificacionSol = new JTextField(15);
+        gbc.gridx = 1;
+        add(txtCalificacionSol, gbc);
+
+        btnEnviar = new JButton("Encolar Solicitud");
+        btnEnviar.setFont(new Font("Arial", Font.BOLD, 14));
+        gbc.gridy = 4; gbc.gridx = 0; gbc.gridwidth = 2;
+        gbc.insets = new Insets(30, 0, 0, 0);
+        add(btnEnviar, gbc);
+
+        btnEnviar.addActionListener(e -> encolarSolicitud());
+    }
+
+    private void encolarSolicitud() {
+        String mat = txtMatriculaSol.getText().trim();
+        String clave = txtClaveCursoSol.getText().trim();
+        String califStr = txtCalificacionSol.getText().trim();
+
+        if (mat.isEmpty() || clave.isEmpty() || califStr.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.");
+            return;
+        }
+
+        float calificacion;
+        try {
+            calificacion = Float.parseFloat(califStr);
+            if (calificacion < 0 || calificacion > 10) {
+                throw new NumberFormatException();
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Calificación inválida. Ingrese un número entre 0 y 10.");
+            return;
+        }
+
+        Estudiante estudiante = mainFrame.sistemaEscolar.buscarEstudiante(mat);
+        
+        if (estudiante == null) {
+            JOptionPane.showMessageDialog(this, "No se encontró el estudiante.");
+            return;
+        }
+        
+        Curso curso = mainFrame.sistemaEscolar.getCursos().buscarCurso(clave);
+        
+        if (curso == null) {
+            JOptionPane.showMessageDialog(this, "No se encontró el curso.");
+            return;
+        }
+        
+        
+        mainFrame.sistemaEscolar.enviarSolicitudCalificacion(mat, clave, calificacion);
+        
+
+        JOptionPane.showMessageDialog(this, "Solicitud encolada correctamente.\nSerá procesada en el panel correspondiente.");
+        limpiarCampos();
+    }
+
+    
+    private void limpiarCampos() {
+        txtMatriculaSol.setText("");
+        txtClaveCursoSol.setText("");
+        txtCalificacionSol.setText("");
+        txtMatriculaSol.requestFocus();
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
