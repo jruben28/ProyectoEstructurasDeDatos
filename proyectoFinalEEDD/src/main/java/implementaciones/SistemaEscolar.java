@@ -276,7 +276,7 @@ public class SistemaEscolar {
         System.out.println("Promedio registrado correctamente");
     }
 
-    public void enviarSolicitudCalificacion(String matricula, String claveCurso, double calificacion) {
+    public void enviarSolicitudCalificacion(String matricula, String claveCurso, float calificacion) {
         //buscamos el estudiante
         Estudiante estudiante = buscarEstudiante(matricula);
         //validamos que exista
@@ -307,7 +307,7 @@ public class SistemaEscolar {
         //obtenemos el estudiante
         Estudiante estudiante= solicitud.getEstudiante();
         //obtenemos la calificacion
-        double calificacion= solicitud.getCalificacion();
+        Float calificacion= solicitud.getCalificacion();
         //agregamos la calificacion al arreglo
         estudiante.getCalificaciones().append(calificacion);
         //registramos la accion en la pila

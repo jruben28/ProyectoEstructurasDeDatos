@@ -12,9 +12,9 @@ public class SolicitudCalificacion {
 
     private Estudiante estudiante;
     private Curso curso;
-    private double calificacion;
+    private float calificacion;
 
-    public SolicitudCalificacion(Estudiante estudiante, Curso curso, double calificacion) {
+    public SolicitudCalificacion(Estudiante estudiante, Curso curso, float calificacion) {
         this.estudiante = estudiante;
         this.curso = curso;
         this.calificacion = calificacion;
@@ -36,11 +36,11 @@ public class SolicitudCalificacion {
         this.curso = curso;
     }
 
-    public double getCalificacion() {
+    public float getCalificacion() {
         return calificacion;
     }
 
-    public void setCalificacion(double calificacion) {
+    public void setCalificacion(float calificacion) {
         this.calificacion = calificacion;
     }
 
