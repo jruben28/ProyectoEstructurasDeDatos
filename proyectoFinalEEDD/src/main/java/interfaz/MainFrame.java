@@ -137,10 +137,10 @@ public class MainFrame extends javax.swing.JFrame {
         pnlListarEspera = new PanelListarEspera(this);
         
         pnlEnviarSolicitud = new PanelEnviarSolicitud(this);
-        pnlProcesarSolicitud = new PanelProcesarSolicitud();
+        pnlProcesarSolicitud = new PanelProcesarSolicitud(this);
         
-        pnlListarPromedio = new PanelListarPromedio();
-        pnlRotarRol = new PanelRotarRol();
+        pnlListarPromedio = new PanelListarPromedio(this);
+        pnlRotarRol = new PanelRotarRol(this);
 
         
         mainContainer.add(pnlRegistroEst, "REGISTRAR_EST");
