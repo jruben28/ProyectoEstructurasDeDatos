@@ -35,7 +35,7 @@ public class Estudiante implements Comparable<Estudiante>{
      * @param colonia
      * @param ciudad 
      */
-    public Estudiante(String matricula, String nombreCompleto, String telefono, String correo, String calle, String numero, String colonia, String ciudad, EstudiantesBST arbolEstudiantes) {
+    public Estudiante(String matricula, String nombreCompleto, String telefono, String correo, String calle, String numero, String colonia, String ciudad) {
         this.matricula = matricula;
         this.nombreCompleto = nombreCompleto;
         this.telefono = telefono;
@@ -46,7 +46,6 @@ public class Estudiante implements Comparable<Estudiante>{
         this.ciudad = ciudad;
         this.calificaciones = new ArrayList(Float.class, 30);
         this.solicitudCalificaciones = new ArrayListQueue(Float.class, 30);
-        agregarABST(arbolEstudiantes);
     }
 
     public String getMatricula() {
