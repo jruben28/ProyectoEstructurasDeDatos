@@ -128,10 +128,11 @@ public class PanelRegistroEstudiante extends javax.swing.JPanel {
         String col = txtColonia.getText().trim();
         String ciu = txtCiudad.getText().trim();
         
-        Estudiante estudiante = new Estudiante(mat, nom, tel, cor, cal, num, col, ciu, mainFrame.arbolEstudiantes);
+        Estudiante estudiante = new Estudiante(mat, nom, tel, cor, cal, num, col, ciu);
+        mainFrame.sistemaEscolar.registrarEstudiante(estudiante);
 
         JOptionPane.showMessageDialog(this, "¡Estudiante " + nom + " registrado con éxito!");
-        mainFrame.arbolEstudiantes.imprimirPrimero();
+
 
         limpiarCampos();
     }
