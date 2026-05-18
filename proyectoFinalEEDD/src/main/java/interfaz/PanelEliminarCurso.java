@@ -4,17 +4,31 @@
  */
 package interfaz;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+
 /**
  *
  * @author joser
  */
 public class PanelEliminarCurso extends javax.swing.JPanel {
-
+    MainFrame mainFrame;
+    private JTextField txtClaveEliminar;
+    private JButton btnEliminar;
     /**
      * Creates new form PanelEliminarCurso
      */
-    public PanelEliminarCurso() {
-        initComponents();
+    public PanelEliminarCurso(MainFrame mainFrame) {
+        this.mainFrame = mainFrame;
+        iniciarComponentes();
     }
 
     /**
@@ -37,6 +51,70 @@ public class PanelEliminarCurso extends javax.swing.JPanel {
             .addGap(0, 300, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void iniciarComponentes() {
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        JLabel lblTitulo = new JLabel("ELIMINAR CURSO", SwingConstants.CENTER);
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.insets = new Insets(0, 0, 20, 0);
+        add(lblTitulo, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridy = 1;
+        gbc.gridx = 0;
+        add(new JLabel("Clave del curso a eliminar:"), gbc);
+
+        txtClaveEliminar = new JTextField(15);
+        gbc.gridx = 1;
+        add(txtClaveEliminar, gbc);
+
+        btnEliminar = new JButton("Eliminar Curso");
+        btnEliminar.setBackground(new Color(255, 200, 200));
+        gbc.gridy = 2;
+        gbc.gridx = 0;
+        gbc.gridwidth = 2;
+        gbc.insets = new Insets(20, 0, 0, 0);
+        add(btnEliminar, gbc);
+
+        btnEliminar.addActionListener(e -> confirmarEliminacion());
+    }
+
+    private void confirmarEliminacion() {
+        String clave = txtClaveEliminar.getText().trim();
+
+        if (clave.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, ingresa la clave del curso.");
+            return;
+        }
+
+        int respuesta = JOptionPane.showConfirmDialog(
+                this, 
+                "¿Estás seguro de que deseas eliminar el curso con clave: " + clave + "?", 
+                "Confirmar Eliminación", 
+                JOptionPane.YES_NO_OPTION, 
+                JOptionPane.WARNING_MESSAGE
+        );
+
+        if (respuesta == JOptionPane.YES_OPTION) {
+            ejecutarBaja(clave);
+        }
+    }
+
+    private void ejecutarBaja(String clave) {
+        
+        mainFrame.sistemaEscolar.eliminarCurso(clave);
+        
+
+        JOptionPane.showMessageDialog(this, "Curso eliminado correctamente.");
+            txtClaveEliminar.setText("");
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
