@@ -26,7 +26,7 @@ public class PanelProcesarSolicitud extends javax.swing.JPanel {
     
     private MainFrame mainFrame;
     private JTextArea txtAreaProcesamiento;
-    private JButton btnProcesar;
+    private JButton btnProcesar, btnActualizar;
 
     /**
      * Creates new form PanelProcesarSolicitud
@@ -63,33 +63,43 @@ public class PanelProcesarSolicitud extends javax.swing.JPanel {
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.BOTH;
 
-        JLabel lblTitulo = new JLabel("PROCESAMIENTO DE SOLICITUDES (COLA)", SwingConstants.CENTER);
+        JLabel lblTitulo = new JLabel("PROCESAMIENTO DE CALIFICACIONES", SwingConstants.CENTER);
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
-        gbc.gridx = 0; gbc.gridy = 0;
+        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
         gbc.weighty = 0;
         add(lblTitulo, gbc);
 
         txtAreaProcesamiento = new JTextArea(10, 30);
         txtAreaProcesamiento.setEditable(false);
-        txtAreaProcesamiento.setFont(new Font("Monospaced", Font.BOLD, 14));
-        txtAreaProcesamiento.setBorder(BorderFactory.createTitledBorder("Solicitud Actual en Espera"));
+        txtAreaProcesamiento.setFont(new Font("Monospaced", Font.BOLD, 16));
+        txtAreaProcesamiento.setBorder(BorderFactory.createTitledBorder("Datos de la Solicitud"));
         
         JScrollPane scroll = new JScrollPane(txtAreaProcesamiento);
-        gbc.gridy = 1;
-        gbc.weighty = 1.0; 
+        gbc.gridy = 1; gbc.weighty = 1.0; 
         add(scroll, gbc);
 
-        btnProcesar = new JButton("Procesar y Siguiente");
-        btnProcesar.setFont(new Font("Arial", Font.BOLD, 14));
-        btnProcesar.setBackground(new Color(150, 255, 150));
         gbc.gridy = 2;
         gbc.weighty = 0;
         gbc.fill = GridBagConstraints.NONE;
+        
+        btnActualizar = new JButton("Ver Siguiente");
+        gbc.gridx = 0; gbc.gridwidth = 1;
+        add(btnActualizar, gbc);
+
+        btnProcesar = new JButton("Procesar / Eliminar");
+        btnProcesar.setBackground(new Color(255, 100, 100));
+        btnProcesar.setEnabled(false);
+        gbc.gridx = 1;
         add(btnProcesar, gbc);
-        actualizarVista();
+
+
+        btnActualizar.addActionListener(e -> actualizarVista());
+
 
         btnProcesar.addActionListener(e -> procesarSiguiente());
     }
+    
+    
     
     private void procesarSiguiente() {
 
@@ -105,14 +115,17 @@ public class PanelProcesarSolicitud extends javax.swing.JPanel {
     public void actualizarVista() {
 
         if (mainFrame.sistemaEscolar.getSolicitudes().empty()) {
+            System.out.println("solicitudes esta vacio");
             txtAreaProcesamiento.setText("\n\n   --- NO HAY SOLICITUDES PENDIENTES ---");
             btnProcesar.setEnabled(false);
             return;
         }
         
         SolicitudCalificacion siguiente = mainFrame.sistemaEscolar.getSolicitudes().peek();
+        siguiente.toString();
 
         if (siguiente == null) {
+            System.out.println("no hay solicitudes");
             txtAreaProcesamiento.setText("\n\n   --- NO HAY SOLICITUDES PENDIENTES ---");
             btnProcesar.setEnabled(false);
         } else {
