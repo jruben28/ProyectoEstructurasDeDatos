@@ -113,7 +113,7 @@ public class PanelBuscarEstudiante extends javax.swing.JPanel {
         String mat = txtBusquedaMatricula.getText().trim();
         if (mat.isEmpty()) return;
 
-        Estudiante encontrado = mainFrame.arbolEstudiantes.busquedaPorMatricula(mat);
+        Estudiante encontrado = mainFrame.sistemaEscolar.buscarEstudiante(mat);
         
 
         if (encontrado != null) {
