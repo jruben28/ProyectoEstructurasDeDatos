@@ -324,6 +324,12 @@ public class SistemaEscolar {
         }
         cursos.eliminarCurso(claveCurso);
     }
+    
+    
+    public AVLTree<ParPromedioEstudiante> getAVL(){
+    
+        return promedios.getParPromedioEstudiante();
+    }
 
     public void mostrarPromediosEstudiantes() {
         //mostramos el listado de promedios
