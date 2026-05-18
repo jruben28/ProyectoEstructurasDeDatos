@@ -31,6 +31,18 @@ public class PromedioEstudiante {
 
     }
 
+    public AVLTree<ParPromedioEstudiante> getParPromedioEstudiante() {
+        return parPromedioEstudiante;
+    }
+
+    public void setParPromedioEstudiante(AVLTree<ParPromedioEstudiante> parPromedioEstudiante) {
+        this.parPromedioEstudiante = parPromedioEstudiante;
+    }
+
+    
+    
+    
+    
     /**
      * Imprime el listado del promedio de estudiantes en orden ascendente.
      */
