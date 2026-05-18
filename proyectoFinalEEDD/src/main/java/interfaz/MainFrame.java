@@ -5,6 +5,7 @@
 package interfaz;
 
 import implementaciones.EstudiantesBST;
+import implementaciones.SistemaEscolar;
 import java.awt.CardLayout;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -40,7 +41,9 @@ public class MainFrame extends javax.swing.JFrame {
     private PanelRotarRol pnlRotarRol;
     
     //persistencia
-    public EstudiantesBST arbolEstudiantes = new EstudiantesBST();
+    //SistemaEscolar
+    public SistemaEscolar sistemaEscolar = new SistemaEscolar();
+    //public EstudiantesBST arbolEstudiantes = new EstudiantesBST();
     
 
     /**
@@ -125,9 +128,9 @@ public class MainFrame extends javax.swing.JFrame {
         pnlRegistroEst = new PanelRegistroEstudiante(this);
         pnlBuscarEst = new PanelBuscarEstudiante(this);
         
-        pnlAgregarCurso = new PanelAgregarCurso();
-        pnlEliminarCurso = new PanelEliminarCurso();
-        pnlListarCurso = new PanelListarCurso();
+        pnlAgregarCurso = new PanelAgregarCurso(this);
+        pnlEliminarCurso = new PanelEliminarCurso(this);
+        pnlListarCurso = new PanelListarCurso(this);
         
         pnlInscribirEst = new PanelInscribirEstudiante();
         pnlListarInscritos = new PanelListarInscritos();
