@@ -314,6 +314,13 @@ public class SistemaEscolar {
         acciones.agregarAccion(new Accion("CALIFICACION", solicitud));
         System.out.println("Solicitud procesada correctamente");
     }
+    
+    public void eliminarCurso(String claveCurso){
+        if(claveCurso==null || claveCurso.isBlank()){
+            return; 
+        }
+        cursos.eliminarCurso(claveCurso);
+    }
 
     public void mostrarPromediosEstudiantes() {
         //mostramos el listado de promedios
