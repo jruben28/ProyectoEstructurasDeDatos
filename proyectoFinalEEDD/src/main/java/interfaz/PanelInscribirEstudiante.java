@@ -4,17 +4,33 @@
  */
 package interfaz;
 
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import objetos.Curso;
+import objetos.Estudiante;
+
 /**
  *
  * @author joser
  */
 public class PanelInscribirEstudiante extends javax.swing.JPanel {
+    private MainFrame mainFrame;
+    private JTextField txtMatriculaIns, txtClaveCursoIns;
+    private JButton btnInscribir;
 
     /**
      * Creates new form PanelInscribirEstudiante
      */
-    public PanelInscribirEstudiante() {
-        initComponents();
+    public PanelInscribirEstudiante(MainFrame mainFrame) {
+        this.mainFrame = mainFrame;
+        inciarComponentes();
     }
 
     /**
@@ -37,6 +53,69 @@ public class PanelInscribirEstudiante extends javax.swing.JPanel {
             .addGap(0, 300, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void inciarComponentes() {
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        JLabel lblTitulo = new JLabel("INSCRIBIR ESTUDIANTE EN CURSO", SwingConstants.CENTER);
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
+        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
+        gbc.insets = new Insets(0, 0, 30, 0);
+        add(lblTitulo, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.insets = new Insets(10, 10, 10, 10);
+
+        gbc.gridy = 1; gbc.gridx = 0;
+        add(new JLabel("Matrícula del Estudiante:"), gbc);
+        txtMatriculaIns = new JTextField(15);
+        gbc.gridx = 1;
+        add(txtMatriculaIns, gbc);
+
+        gbc.gridy = 2; gbc.gridx = 0;
+        add(new JLabel("Clave del Curso:"), gbc);
+        txtClaveCursoIns = new JTextField(15);
+        gbc.gridx = 1;
+        add(txtClaveCursoIns, gbc);
+
+        btnInscribir = new JButton("Confirmar Inscripción");
+        btnInscribir.setFont(new Font("Arial", Font.BOLD, 14));
+        gbc.gridy = 3; gbc.gridx = 0; gbc.gridwidth = 2;
+        gbc.insets = new Insets(30, 0, 0, 0);
+        add(btnInscribir, gbc);
+
+        btnInscribir.addActionListener(e -> procesarInscripcion());
+    }
+
+    private void procesarInscripcion() {
+        String mat = txtMatriculaIns.getText().trim();
+        String clave = txtClaveCursoIns.getText().trim();
+
+        if (mat.isEmpty() || clave.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ambos campos son obligatorios.");
+            return;
+        }
+
+        mainFrame.sistemaEscolar.inscribirEstudianteCurso(mat, clave);
+        
+        Estudiante estudiante = mainFrame.sistemaEscolar.buscarEstudiante(mat);
+        Curso curso = mainFrame.sistemaEscolar.getCursos().buscarCurso(clave);
+
+        JOptionPane.showMessageDialog(this,
+                "¡Éxito!\nEstudiante: " + estudiante.getNombreCompleto()
+                + "\nInscrito en: " + curso.getNombre());
+
+        limpiarCampos();
+    }
+
+    private void limpiarCampos() {
+        txtMatriculaIns.setText("");
+        txtClaveCursoIns.setText("");
+        txtMatriculaIns.requestFocus();
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
