@@ -4,17 +4,38 @@
  */
 package interfaz;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import objetos.Curso;
+import objetos.Estudiante;
+
 /**
  *
  * @author joser
  */
 public class PanelRotarRol extends javax.swing.JPanel {
+    
+    private MainFrame mainFrame;
+    private JTextField txtClaveBuscar;
+    private JLabel lblNombreTutor;
+    private JButton btnBuscar, btnRotar;
+    private Curso cursoActual;
 
     /**
      * Creates new form PanelRotarRol
      */
-    public PanelRotarRol() {
-        initComponents();
+    public PanelRotarRol(MainFrame mainFrame) {
+        this.mainFrame = mainFrame;
+        iniciarComponentes();
     }
 
     /**
@@ -37,6 +58,72 @@ public class PanelRotarRol extends javax.swing.JPanel {
             .addGap(0, 300, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void iniciarComponentes() {
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        add(new JLabel("Clave del curso:"), gbc);
+        
+        txtClaveBuscar = new JTextField(15);
+        gbc.gridx = 1;
+        add(txtClaveBuscar, gbc);
+
+        btnBuscar = new JButton("Buscar Curso");
+        gbc.gridy = 1; gbc.gridx = 0; gbc.gridwidth = 2;
+        add(btnBuscar, gbc);
+
+        JPanel pnlTutor = new JPanel();
+        pnlTutor.setBorder(BorderFactory.createTitledBorder("Tutor Actual"));
+        lblNombreTutor = new JLabel("Ningún curso seleccionado");
+        lblNombreTutor.setFont(new Font("Arial", Font.BOLD, 16));
+        lblNombreTutor.setForeground(Color.BLUE);
+        pnlTutor.add(lblNombreTutor);
+
+        gbc.gridy = 2;
+        add(pnlTutor, gbc);
+
+        btnRotar = new JButton("Rotar Rol (Siguiente)");
+        btnRotar.setEnabled(false);
+        gbc.gridy = 3;
+        add(btnRotar, gbc);
+
+        btnBuscar.addActionListener(e -> buscarCurso());
+        btnRotar.addActionListener(e -> rotarTutor());
+    }
+
+    private void buscarCurso() {
+        String clave = txtClaveBuscar.getText().trim();
+        cursoActual = mainFrame.sistemaEscolar.getCursos().buscarCurso(clave);
+        
+
+        if (cursoActual != null) {
+            if (cursoActual.getListadoEstudiantes().empty()) {
+                JOptionPane.showMessageDialog(this, "El curso no tiene alumnos inscritos.");
+                btnRotar.setEnabled(false);
+                lblNombreTutor.setText("Sin alumnos");
+            } else {
+                btnRotar.setEnabled(true);
+                actualizarLabelTutor();
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Curso no encontrado.");
+            btnRotar.setEnabled(false);
+            lblNombreTutor.setText("Ningún curso seleccionado");
+        }
+    }
+
+    private void rotarTutor() {
+        mainFrame.sistemaEscolar.rotarRolCurso(cursoActual.getClave());
+        actualizarLabelTutor();
+    }
+
+    private void actualizarLabelTutor() {
+        Estudiante tutor = cursoActual.getTutorActual();
+        lblNombreTutor.setText(tutor.getNombreCompleto());
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
