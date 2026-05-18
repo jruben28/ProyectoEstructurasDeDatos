@@ -4,17 +4,32 @@
  */
 package interfaz;
 
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
+import objetos.Curso;
+
 /**
  *
  * @author joser
  */
 public class PanelListarCurso extends javax.swing.JPanel {
-
+    MainFrame mainFrame;
+    private JTextArea txtAreaCursos;
+    private JButton btnActualizar;
+    
     /**
      * Creates new form PanelListarCurso
      */
-    public PanelListarCurso() {
-        initComponents();
+    public PanelListarCurso(MainFrame mainFrame) {
+        this.mainFrame = mainFrame;
+        iniciarComponentes();
     }
 
     /**
@@ -37,6 +52,62 @@ public class PanelListarCurso extends javax.swing.JPanel {
             .addGap(0, 300, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void iniciarComponentes() {
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.BOTH;
+
+        JLabel lblTitulo = new JLabel("LISTADO DE CURSOS DISPONIBLES", SwingConstants.CENTER);
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 1;
+        gbc.weighty = 0;
+        add(lblTitulo, gbc);
+
+        txtAreaCursos = new JTextArea();
+        txtAreaCursos.setEditable(false);
+        txtAreaCursos.setFont(new Font("Monospaced", Font.PLAIN, 13));
+
+        JScrollPane scrollPane = new JScrollPane(txtAreaCursos);
+        gbc.gridy = 1;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        add(scrollPane, gbc);
+
+        btnActualizar = new JButton("Refrescar Lista");
+        gbc.gridy = 2;
+        gbc.weighty = 0;
+        gbc.fill = GridBagConstraints.NONE;
+        add(btnActualizar, gbc);
+
+        btnActualizar.addActionListener(e -> listarCursos());
+    }
+
+    private void listarCursos() {
+        txtAreaCursos.setText("");
+
+        if (mainFrame.sistemaEscolar.mostrarCursos().empty()) {
+            txtAreaCursos.setText("\n   No hay cursos registrados en el sistema.");
+            return;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("%-15s %-30s %-10s\n", "CLAVE", "NOMBRE DEL CURSO", "CAPACIDAD"));
+        sb.append("----------------------------------------------------------------------\n");
+
+        for (Curso curso : mainFrame.sistemaEscolar.mostrarCursos()) {
+            sb.append(String.format("%-15s %-30s %-10d\n",
+                    curso.getClave(),
+                    curso.getNombre(),
+                    curso.getCapacidadMaxima()));
+        }
+
+        txtAreaCursos.setText(sb.toString());
+
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
