@@ -4,17 +4,38 @@
  */
 package interfaz;
 
+import implementaciones.LinkedList;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import objetos.Curso;
+import objetos.Estudiante;
+
 /**
  *
  * @author joser
  */
 public class PanelListarInscritos extends javax.swing.JPanel {
+    private MainFrame mainFrame;
+    private JTextField txtClaveCurso;
+    private JTextArea txtAreaInscritos;
+    private JButton btnVer;
 
     /**
      * Creates new form PanelListarInscritos
      */
-    public PanelListarInscritos() {
-        initComponents();
+    public PanelListarInscritos(MainFrame mainFrame) {
+        this.mainFrame = mainFrame;
+        iniciarComponentes();
     }
 
     /**
@@ -37,6 +58,83 @@ public class PanelListarInscritos extends javax.swing.JPanel {
             .addGap(0, 300, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void iniciarComponentes() {
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        JLabel lblTitulo = new JLabel("ESTUDIANTES INSCRITOS POR CURSO", SwingConstants.CENTER);
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        add(lblTitulo, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridy = 1;
+        gbc.gridx = 0;
+        add(new JLabel("Clave del Curso:"), gbc);
+
+        txtClaveCurso = new JTextField(15);
+        gbc.gridx = 1;
+        add(txtClaveCurso, gbc);
+
+        btnVer = new JButton("Mostrar Lista");
+        gbc.gridy = 2;
+        gbc.gridx = 0;
+        gbc.gridwidth = 2;
+        add(btnVer, gbc);
+
+        txtAreaInscritos = new JTextArea(15, 40);
+        txtAreaInscritos.setEditable(false);
+        txtAreaInscritos.setFont(new Font("Monospaced", Font.PLAIN, 12));
+        
+        JScrollPane scroll = new JScrollPane(txtAreaInscritos);
+        scroll.setBorder(BorderFactory.createTitledBorder("Alumnos Inscritos"));
+        
+        gbc.gridy = 3;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weighty = 1.0;
+        add(scroll, gbc);
+
+        btnVer.addActionListener(e -> listarInscritos());
+    }
+
+    private void listarInscritos() {
+        String clave = txtClaveCurso.getText().trim();
+        
+        Curso curso = mainFrame.sistemaEscolar.getCursos().buscarCurso(clave);
+        
+        if (clave.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingresa una clave de curso.");
+            return;
+        }
+        
+        if (curso == null) {
+            JOptionPane.showMessageDialog(this, "El curso no existe.");
+            return;
+        }
+        
+        LinkedList<Estudiante> listado = mainFrame.sistemaEscolar.mostrarEstudiantesCurso(clave);
+        
+        StringBuilder sb = new StringBuilder();
+        sb.append("CURSO: ").append(curso.getNombre()).append("\n");
+        sb.append("------------------------------------------------------------\n");
+        sb.append(String.format("%-15s %-30s\n", "MATRÍCULA", "NOMBRE DEL ESTUDIANTE"));
+        sb.append("------------------------------------------------------------\n");
+
+        if (listado.empty()) {
+            sb.append("\nNo hay estudiantes inscritos en este curso aún.");
+        } else {
+            for (Estudiante est : listado) {
+                sb.append(String.format("%-15s %-30s\n", est.getMatricula(), est.getNombreCompleto()));
+            }
+        }
+
+        txtAreaInscritos.setText(sb.toString());
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
