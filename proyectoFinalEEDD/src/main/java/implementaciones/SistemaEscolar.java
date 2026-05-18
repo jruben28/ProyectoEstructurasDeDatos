@@ -129,7 +129,7 @@ public class SistemaEscolar {
         switch (tipoAccion) {
             case "REGISTRO_ESTUDIANTE":
                 //obtenemos el estudiante registrado
-                Estudiante estudiante= (Estudiante) accion.getDato();
+                Estudiante estudiante = (Estudiante) accion.getDato();
                 //eliminamos el estudiante del BST
                 estudiantes.eliminarEstudiante(estudiante);
                 //mostramos mensaje
@@ -138,7 +138,7 @@ public class SistemaEscolar {
 
             case "REGISTRO_CURSO":
                 //obtenemos el curso registrado
-                Curso curso= (Curso) accion.getDato();
+                Curso curso = (Curso) accion.getDato();
                 //eliminamos el curso
                 cursos.eliminarCurso(curso.getClave());
                 //mostramos mensaje
@@ -146,11 +146,11 @@ public class SistemaEscolar {
                 break;
             case "INSCRIPCION":
                 //obtenemos la inscripcion
-                Inscripcion inscripcion= (Inscripcion) accion.getDato();
+                Inscripcion inscripcion = (Inscripcion) accion.getDato();
                 //obtenemos el curso
-                Curso curso2= inscripcion.getCurso();
+                Curso curso2 = inscripcion.getCurso();
                 //obtenemos el estudiantew
-                Estudiante estudiante2= inscripcion.getEstudiante();
+                Estudiante estudiante2 = inscripcion.getEstudiante();
                 //eliminamos el estudiante del curso
                 curso2.eliminarEstudiante(estudiante2);
                 //mostramos mensaje
@@ -158,9 +158,9 @@ public class SistemaEscolar {
                 break;
             case "CALIFICACION":
                 //obtenemos la solicitiud
-                SolicitudCalificacion solicitud= (SolicitudCalificacion) accion.getDato();
+                SolicitudCalificacion solicitud = (SolicitudCalificacion) accion.getDato();
                 //obtenemos el estudiante
-                Estudiante estudiante3= solicitud.getEstudiante();
+                Estudiante estudiante3 = solicitud.getEstudiante();
                 //validamos si tiene calificaciones
                 if (!estudiante3.getCalificaciones().empty()) {
                     //eliminamos la ultima calificacion agregada
@@ -297,27 +297,30 @@ public class SistemaEscolar {
     }
 
     public void procesarSiguienteSolicitud() {
-        //validamos si la cola esta vacia 
+        //validamos si la cola esta vacia
         if (solicitudes.empty()) {
             System.out.println("No hay solicitudes pendientes");
             return;
         }
-        //obtenemos la solicitud
-        SolicitudCalificacion solicitud = solicitudes.dequeue();
-        //obtenemos al estudiante 
-        Estudiante estudiante = solicitud.getEstudiante();
-        //obtenemos la calificacion 
-        double cal = solicitud.getCalificacion();
+        //obtenemos la siguiente solicitud
+        SolicitudCalificacion solicitud= solicitudes.dequeue();
+        //obtenemos el estudiante
+        Estudiante estudiante= solicitud.getEstudiante();
+        //obtenemos la calificacion
+        double calificacion= solicitud.getCalificacion();
         //agregamos la calificacion al arreglo
-        estudiante.getCalificaciones().append(cal);
-        //registramos la accion
-        acciones.agregarAccion(new Accion("CALIFICACION", solicitud));
+        estudiante.getCalificaciones().append(calificacion);
+        //registramos la accion en la pila
+        acciones.agregarAccion(new Accion("CALIFICACION",solicitud));
+        //actualizamos el AVL de promedios
+        registrarPromedioEstudiante(estudiante.getMatricula());
+        //mostramos mensaje
         System.out.println("Solicitud procesada correctamente");
     }
-    
-    public void eliminarCurso(String claveCurso){
-        if(claveCurso==null || claveCurso.isBlank()){
-            return; 
+
+    public void eliminarCurso(String claveCurso) {
+        if (claveCurso == null || claveCurso.isBlank()) {
+            return;
         }
         cursos.eliminarCurso(claveCurso);
     }
