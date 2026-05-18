@@ -4,17 +4,32 @@
  */
 package interfaz;
 
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import objetos.Curso;
+
 /**
  *
  * @author joser
  */
 public class PanelAgregarCurso extends javax.swing.JPanel {
-
+    
+    private MainFrame mainFrame;
+    private JTextField txtClave, txtNombreCurso, txtCapacidad;
+    private JButton btnAgregar;
     /**
      * Creates new form PanelAgregarCurso
      */
-    public PanelAgregarCurso() {
-        initComponents();
+    public PanelAgregarCurso(MainFrame mainFrame) {
+        this.mainFrame = mainFrame;
+        iniciarComponentes();
     }
 
     /**
@@ -37,6 +52,96 @@ public class PanelAgregarCurso extends javax.swing.JPanel {
             .addGap(0, 300, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void iniciarComponentes() {
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        JLabel lblTitulo = new JLabel("REGISTRAR NUEVO CURSO", SwingConstants.CENTER);
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.insets = new Insets(0, 0, 30, 0);
+        add(lblTitulo, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.insets = new Insets(10, 10, 10, 10);
+
+        gbc.gridy = 1; gbc.gridx = 0;
+        add(new JLabel("Clave del Curso:"), gbc);
+        txtClave = new JTextField(15);
+        gbc.gridx = 1;
+        add(txtClave, gbc);
+
+        gbc.gridy = 2; gbc.gridx = 0;
+        add(new JLabel("Nombre del Curso:"), gbc);
+        txtNombreCurso = new JTextField(15);
+        gbc.gridx = 1;
+        add(txtNombreCurso, gbc);
+
+        gbc.gridy = 3; gbc.gridx = 0;
+        add(new JLabel("Capacidad Máxima:"), gbc);
+        txtCapacidad = new JTextField(15);
+        gbc.gridx = 1;
+        add(txtCapacidad, gbc);
+
+        btnAgregar = new JButton("Agregar Curso");
+        btnAgregar.setFont(new Font("Arial", Font.BOLD, 14));
+        gbc.gridy = 4;
+        gbc.gridx = 0;
+        gbc.gridwidth = 2;
+        gbc.insets = new Insets(30, 0, 0, 0);
+        add(btnAgregar, gbc);
+
+        btnAgregar.addActionListener(e -> agregarCurso());
+    }
+
+    private void agregarCurso() {
+        if (!validarCampos()) {
+            return;
+        }
+
+        String clave = txtClave.getText().trim();
+        String nombre = txtNombreCurso.getText().trim();
+        int capacidad = Integer.parseInt(txtCapacidad.getText().trim());
+        
+        Curso curso = new Curso(clave, nombre, capacidad);
+
+        mainFrame.sistemaEscolar.registrarCurso(curso);
+        JOptionPane.showMessageDialog(this, "Curso '" + nombre + "' agregado exitosamente.");
+        limpiarCampos();
+    }
+
+    private boolean validarCampos() {
+        if (txtClave.getText().trim().isEmpty() || 
+            txtNombreCurso.getText().trim().isEmpty() || 
+            txtCapacidad.getText().trim().isEmpty()) {
+            
+            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        try {
+            int cap = Integer.parseInt(txtCapacidad.getText().trim());
+            if (cap <= 0) throw new NumberFormatException();
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "La capacidad debe ser un número entero positivo", "Error", JOptionPane.ERROR_MESSAGE);
+            txtCapacidad.requestFocus();
+            return false;
+        }
+        
+        return true;
+    }
+
+    private void limpiarCampos() {
+        txtClave.setText("");
+        txtNombreCurso.setText("");
+        txtCapacidad.setText("");
+        txtClave.requestFocus();
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
