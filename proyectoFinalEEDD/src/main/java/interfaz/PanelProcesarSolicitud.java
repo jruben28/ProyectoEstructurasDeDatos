@@ -4,17 +4,36 @@
  */
 package interfaz;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
+import objetos.SolicitudCalificacion;
+
 /**
  *
  * @author joser
  */
 public class PanelProcesarSolicitud extends javax.swing.JPanel {
+    
+    private MainFrame mainFrame;
+    private JTextArea txtAreaProcesamiento;
+    private JButton btnProcesar;
 
     /**
      * Creates new form PanelProcesarSolicitud
      */
-    public PanelProcesarSolicitud() {
-        initComponents();
+    public PanelProcesarSolicitud(MainFrame mainFrame) {
+        this.mainFrame = mainFrame;
+        iniciarComponentes();
     }
 
     /**
@@ -37,6 +56,77 @@ public class PanelProcesarSolicitud extends javax.swing.JPanel {
             .addGap(0, 300, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void iniciarComponentes() {
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.BOTH;
+
+        JLabel lblTitulo = new JLabel("PROCESAMIENTO DE SOLICITUDES (COLA)", SwingConstants.CENTER);
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
+        gbc.gridx = 0; gbc.gridy = 0;
+        gbc.weighty = 0;
+        add(lblTitulo, gbc);
+
+        txtAreaProcesamiento = new JTextArea(10, 30);
+        txtAreaProcesamiento.setEditable(false);
+        txtAreaProcesamiento.setFont(new Font("Monospaced", Font.BOLD, 14));
+        txtAreaProcesamiento.setBorder(BorderFactory.createTitledBorder("Solicitud Actual en Espera"));
+        
+        JScrollPane scroll = new JScrollPane(txtAreaProcesamiento);
+        gbc.gridy = 1;
+        gbc.weighty = 1.0; 
+        add(scroll, gbc);
+
+        btnProcesar = new JButton("Procesar y Siguiente");
+        btnProcesar.setFont(new Font("Arial", Font.BOLD, 14));
+        btnProcesar.setBackground(new Color(150, 255, 150));
+        gbc.gridy = 2;
+        gbc.weighty = 0;
+        gbc.fill = GridBagConstraints.NONE;
+        add(btnProcesar, gbc);
+        actualizarVista();
+
+        btnProcesar.addActionListener(e -> procesarSiguiente());
+    }
+    
+    private void procesarSiguiente() {
+
+        mainFrame.sistemaEscolar.procesarSiguienteSolicitud();
+                
+        
+        JOptionPane.showMessageDialog(this, "Solicitud procesada con éxito.");
+        
+        actualizarVista();
+    }
+    
+    
+    public void actualizarVista() {
+
+        if (mainFrame.sistemaEscolar.getSolicitudes().empty()) {
+            txtAreaProcesamiento.setText("\n\n   --- NO HAY SOLICITUDES PENDIENTES ---");
+            btnProcesar.setEnabled(false);
+            return;
+        }
+        
+        SolicitudCalificacion siguiente = mainFrame.sistemaEscolar.getSolicitudes().peek();
+
+        if (siguiente == null) {
+            txtAreaProcesamiento.setText("\n\n   --- NO HAY SOLICITUDES PENDIENTES ---");
+            btnProcesar.setEnabled(false);
+        } else {
+            btnProcesar.setEnabled(true);
+            txtAreaProcesamiento.setText(
+                " DETALLES DE LA SOLICITUD:\n" +
+                " =========================\n\n" +
+                " MATRICULA:  " + siguiente.getEstudiante().getMatricula() + "\n" +
+                " MATERIA:    " + siguiente.getCurso().getNombre() + "\n" +
+                " CALIFICACIÓN: " + siguiente.getCalificacion()
+            );
+        }
+    }
+    
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
