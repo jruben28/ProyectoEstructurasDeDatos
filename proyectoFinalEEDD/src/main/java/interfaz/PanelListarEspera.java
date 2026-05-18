@@ -131,12 +131,12 @@ public class PanelListarEspera extends javax.swing.JPanel {
             sb.append("\nNo hay estudiantes inscritos en este curso aún.");
         } else {
             Nodo<Estudiante> inicio= listado.getInicio();
-            Nodo<Estudiante> actual= inicio;
-            while (actual != null) {
-                Estudiante est= actual.getDato();
+            Nodo<Estudiante> aux= inicio;
+            while (aux != null) {
+                Estudiante est= aux.getDato();
                 sb.append(String.format("%-15s %-30s\n",est.getMatricula(),est.getNombreCompleto()));
-                actual = actual.getSiguiente();
-                if (actual == inicio) {
+                aux = aux.getSiguiente();
+                if (aux == inicio) {
                     break;
                 }
             }
