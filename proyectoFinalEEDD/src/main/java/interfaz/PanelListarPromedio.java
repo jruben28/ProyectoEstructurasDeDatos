@@ -10,6 +10,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.Iterator;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -24,6 +25,7 @@ public class PanelListarPromedio extends javax.swing.JPanel {
     
     private MainFrame mainFrame;
     private JTextArea txtAreaPromedios;
+    private JButton btnRefrescar;
 
     /**
      * Creates new form PanelListarPromedio
@@ -77,7 +79,16 @@ public class PanelListarPromedio extends javax.swing.JPanel {
         gbc.weighty = 1.0;
         add(scroll, gbc);
         
-        imprimirListado();
+        btnRefrescar = new JButton("Actualizar");
+        btnRefrescar.setFont(new Font("Arial", Font.BOLD, 14));
+        gbc.gridy = 2;
+        gbc.weighty = 0;
+        gbc.fill = GridBagConstraints.NONE;
+        add(btnRefrescar, gbc);
+
+        btnRefrescar.addActionListener(e -> {
+            imprimirListado();
+        });
     }
 
     private void imprimirListado() {
