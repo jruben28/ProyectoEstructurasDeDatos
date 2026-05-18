@@ -4,17 +4,33 @@
  */
 package interfaz;
 
+import implementaciones.AVLTree;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.util.Iterator;
+import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
+import objetos.ParPromedioEstudiante;
+
 /**
  *
  * @author joser
  */
 public class PanelListarPromedio extends javax.swing.JPanel {
+    
+    private MainFrame mainFrame;
+    private JTextArea txtAreaPromedios;
 
     /**
      * Creates new form PanelListarPromedio
      */
-    public PanelListarPromedio() {
-        initComponents();
+    public PanelListarPromedio(MainFrame mainFrame) {
+        this.mainFrame = mainFrame;
+        iniciarCompontentes();
     }
 
     /**
@@ -37,6 +53,66 @@ public class PanelListarPromedio extends javax.swing.JPanel {
             .addGap(0, 300, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void iniciarCompontentes() {
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(15, 15, 15, 15);
+        gbc.fill = GridBagConstraints.BOTH;
+
+        JLabel lblTitulo = new JLabel("REPORTE DE PROMEDIOS", SwingConstants.CENTER);
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 20));
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weighty = 0; 
+        add(lblTitulo, gbc);
+
+        txtAreaPromedios = new JTextArea(15, 50);
+        txtAreaPromedios.setEditable(false);
+        txtAreaPromedios.setFont(new Font("Monospaced", Font.PLAIN, 14));
+        
+        JScrollPane scroll = new JScrollPane(txtAreaPromedios);
+        gbc.gridy = 1;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        add(scroll, gbc);
+        
+        imprimirListado();
+    }
+
+    private void imprimirListado() {
+        txtAreaPromedios.setText("");
+        
+        AVLTree<ParPromedioEstudiante> listado = mainFrame.sistemaEscolar.getAVL();
+        
+        
+        if (listado == null || listado.empty()) {
+            txtAreaPromedios.setText("\n   No hay estudiantes registrados.");
+            return;
+        }
+
+        
+        
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(String.format("%-15s %-30s %-10s\n", "MATRICULA", "NOMBRE", "PROMEDIO"));
+        sb.append("----------------------------------------------------------------------\n");
+        
+        Iterator<ParPromedioEstudiante> iterator = listado.getInorderIterator();
+        while (iterator.hasNext()) {
+            ParPromedioEstudiante par = iterator.next();
+            System.out.println("Promedio: " + par.getPromedio()
+                    + " | Matricula: " + par.getEstudiante().getMatricula()
+                    + " | Nombre: " + par.getEstudiante().getNombreCompleto());
+            
+            sb.append(String.format("%-15s %-30s %-10.2f\n", 
+                par.getEstudiante().getMatricula(), 
+                par.getEstudiante().getNombreCompleto(), 
+                par.getPromedio()));
+        }
+
+        txtAreaPromedios.setText(sb.toString());
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
